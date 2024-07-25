@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>save</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<form action="/member/save" method="post">
+    아이디: <input type="text" name="memberId"> <br>
+    비밀번호: <input type="text" name="memberPassword"> <br>
+    이름: <input type="text" name="memberName"> <br>
+    전화번호: <input type="text" name="memberPhone"> <br>
+    <input type="submit" value="회원가입">
+
+</form>
+</body>
+<script th:inline="javascript">
+    const emailCheck = () => {
+        const ID = document.getElementById("memberID").value;
+        const checkResult = document.getElementById("check-result");
+        console.log("입력값: ", ID);
+        $.ajax({
+            // 요청방식: post, url: "id-check", 데이터: id
+            type: "post",
+            url: "/member/ID-check",
+            data: {
+                "memberID": ID
+            },
+            success: function(res) {
+                console.log("요청성공", res);
+                if (res == "ok") {
+                    console.log("사용가능한 ID");
+                    checkResult.style.color = "green";
+                    checkResult.innerHTML = "사용가능한 ID";
+                } else {
+                    console.log("이미 사용중인 ID");
+                    checkResult.style.color = "red";
+                    checkResult.innerHTML = "이미 사용중인 ID";
+                }
+            },
+            error: function(err) {
+                console.log("에러발생", err);
+            }
+        });
+    }
+</script>
+</html>
